@@ -1,8 +1,8 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 
-/// Masih perlu diperiksa lagi
-exports.updateProductTask = functions.https.onRequest((req, res) => {
+/// Need to recheck
+exports.updateTask = functions.https.onRequest((req, res) => {
     const { id, name, category, weight, start_date, end_date, status } = req.body;
     
     // Get the Firestore instance
