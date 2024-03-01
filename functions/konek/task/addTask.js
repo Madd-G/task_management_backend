@@ -2,10 +2,13 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 
 exports.addTask = functions.https.onRequest((req, res) => {
-    const { id, name, category, weight, start_date, end_date, status, assignee, target } = req.body;
+    const { id, name, category, weight, start_date, end_date, status, assignee, target, description, progress, priority } = req.body;
 
     // Get the Firestore instance
     const db = admin.firestore();
+
+    // Buat objek Timestamp untuk created_at dan updated_at
+    const currentTimestamp = admin.firestore.Timestamp.now();
 
     // Check if document with given ID already exists
     db.collection('task').doc(id).get()
@@ -24,8 +27,12 @@ exports.addTask = functions.https.onRequest((req, res) => {
                     end_date: new Date(end_date._seconds * 1000 + end_date._nanoseconds / 1000000),
                     status: status,
                     assignee: assignee,
-                    target: target
-
+                    target: target,
+                    progress: progress,
+                    description: description,
+                    priority: priority,
+                    created_at: currentTimestamp,
+                    updated_at: currentTimestamp,
                 })
                     .then(() => {
                         console.log("Task added with ID: ", id);
