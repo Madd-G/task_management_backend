@@ -13,7 +13,8 @@ exports.getEmployeeNameRole = functions.https.onRequest(async (req, res) => {
                 const employee = {
                     id: doc.id,
                     username: data.username || '',
-                    role: data.role || ''
+                    role: data.role || '',
+                    token: data.token || '',
                 };
                 employees.push(employee);
             }
