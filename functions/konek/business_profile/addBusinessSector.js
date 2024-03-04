@@ -26,6 +26,11 @@ exports.addBusinessSector = functions.https.onRequest(async (req, res) => {
         // Get the current business sectors list
         let businessSectors = docSnapshot.data().business_sector || [];
 
+        // Check if the business sector already exists in the list
+        if (businessSectors.includes(business_sector)) {
+            return res.status(400).json({ error: 'Business sector already exists.' });
+        }
+
         // Add the new business sector to the list
         businessSectors.push(business_sector);
 
@@ -39,3 +44,4 @@ exports.addBusinessSector = functions.https.onRequest(async (req, res) => {
         return res.status(500).json({ error: 'Error adding business sector: ' + error.message });
     }
 });
+
