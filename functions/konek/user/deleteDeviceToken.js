@@ -9,16 +9,16 @@ exports.deleteDeviceToken = functions.https.onRequest((req, res) => {
         return res.status(400).json({ error: 'ID is a required field.' });
     }
 
-    // Hapus token dari dokumen pengguna di Firestore
+    // Hapus FCMToken dari dokumen pengguna di Firestore
     return admin.firestore().collection('users').doc(id).update({
-        token: admin.firestore.FieldValue.delete()
+        fcmToken: admin.firestore.FieldValue.delete()
     })
     .then(() => {
-        console.log('Token deleted successfully');
-        return res.status(200).json({ message: 'Token deleted successfully' });
+        console.log('FCMToken deleted successfully');
+        return res.status(200).json({ message: 'FCMToken deleted successfully' });
     })
     .catch((error) => {
-        console.error('Error deleting token:', error);
-        return res.status(500).json({ error: 'Error deleting token.' });
+        console.error('Error deleting FCMToken:', error);
+        return res.status(500).json({ error: 'Error deleting FCMToken.' });
     });
 });

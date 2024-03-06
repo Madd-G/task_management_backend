@@ -24,7 +24,7 @@ const hashPassword = async (password) => {
 app.post('/login', async (req, res) => {
     cors(req, res, async () => {
         try {
-            const { id, password, schoolId } = req.body;
+            const { id, password } = req.body;
 
             // Retrieve user data from Firestore
             const userSnapshot = await db.collection('users').doc(id).get();
@@ -36,7 +36,7 @@ app.post('/login', async (req, res) => {
             }
 
             // Generate JWT token
-            const token = jwt.sign({ id, schoolId }, 'WWW15.', { expiresIn: 60 });
+            const token = jwt.sign({ id }, 'WWW15.', { expiresIn: 60 });
 
             // Combine token with userData
             userData.token = token;
@@ -135,64 +135,5 @@ const sendEmail = async (email, subject, message) => {
     // Kirim email
     await transporter.sendMail(mailOptions);
 };
-
-// Fungsi untuk reset kredensial
-app.post('/resetCredentials', async (req, res) => {
-    cors(req, res, async () => {
-        try {
-            const { username, favoriteFood, schoolId } = req.body;
-
-            // Retrieve user data from Firestore
-            const userSnapshot = await db.collection('schools').doc(schoolId).collection('users').doc(username).get();
-            const userData = userSnapshot.data();
-
-            // Memeriksa apakah data pengguna dan makanan favorit cocok
-            if (!userData || userData.favoriteFood !== favoriteFood) {
-                return res.status(400).json({ code: -1, error: 'Invalid credentials', message: 'Username or favorite food is incorrect' });
-            }
-
-            // Ambil password pengguna
-            const password = userData.password;
-
-            // Jika validasi berhasil, kirim email dengan informasi yang diperlukan
-            const email = userData.email;
-            const subject = 'Reset Credentials'; // Subjek email
-            const message = `Your username is: ${username} and your password is ${password}`; // Isi email (berisi username dan password)
-            await sendEmail(email, subject, message); // Kirim email
-
-            // Kembalikan kode 1 untuk menandakan reset berhasil
-            return res.status(200).json({ code: 1, message: 'Credentials reset successful' });
-        } catch (error) {
-            console.error('Error resetting credentials:', error);
-            return res.status(500).json({ code: -1, error: 'Internal server error', message: 'Something went wrong' });
-        }
-    })
-});
-
-app.post('/resetPassword', async (req, res) => {
-    cors(req, res, async () => {
-        try {
-            const { username, newPassword, email, schoolId } = req.body;
-
-            // Hash the new password
-            const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-            // Update user's password in the database
-            await db.collection('schools').doc(schoolId).collection('users').doc(username).update({
-                password: hashedPassword
-            });
-
-            // Send email notification
-            const subject = 'Password Reset';
-            const message = 'Your password has been successfully reset.';
-            await sendEmail(email, subject, message);
-
-            return res.status(200).json({ message: 'Password reset successful' });
-        } catch (error) {
-            console.error('Error resetting password:', error);
-            return res.status(500).json({ error: 'Internal server error', message: 'Something went wrong' });
-        }
-    })
-});
 
 exports.auth = functions.https.onRequest(app);

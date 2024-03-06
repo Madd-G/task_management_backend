@@ -14,7 +14,7 @@ exports.getEmployeeNameRole = functions.https.onRequest(async (req, res) => {
                     id: doc.id,
                     username: data.username || '',
                     role: data.role || '',
-                    token: data.token || '',
+                    fcmToken: data.fcmToken || '',
                 };
                 employees.push(employee);
             }
