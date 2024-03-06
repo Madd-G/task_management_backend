@@ -2,7 +2,7 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 
 exports.addTask = functions.https.onRequest((req, res) => {
-    const { id, name, category, weight, start_date, end_date, status, assignee, target, description, progress, priority } = req.body;
+    const { id, name, category, weight, start_date, end_date, status, assignee, target, description, progress, priority, image_url } = req.body;
 
     // Get the Firestore instance
     const db = admin.firestore();
@@ -33,6 +33,8 @@ exports.addTask = functions.https.onRequest((req, res) => {
                     priority: priority,
                     created_at: currentTimestamp,
                     updated_at: currentTimestamp,
+                    image_url: image_url,
+
                 })
                     .then(() => {
                         console.log("Task added with ID: ", id);
