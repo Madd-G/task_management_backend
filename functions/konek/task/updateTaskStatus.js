@@ -3,7 +3,7 @@ const admin = require('firebase-admin');
 
 exports.updateTaskStatus = functions.https.onRequest(async (req, res) => {
     try {
-        const { id, status } = req.body;
+        const { id, status, updater } = req.body;
 
         // Get Firestore instance
         const db = admin.firestore();
@@ -13,6 +13,7 @@ exports.updateTaskStatus = functions.https.onRequest(async (req, res) => {
         // Update status field in the task document
         await db.collection('task').doc(id).update({
             status: status,
+            updater: updater,
             updated_at : currentTimestamp,
         });
 

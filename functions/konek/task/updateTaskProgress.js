@@ -4,7 +4,7 @@ const admin = require('firebase-admin');
 
 exports.updateTaskProgress = functions.https.onRequest(async (req, res) => {
     try {
-        const { id, progress } = req.body;
+        const { id, progress, updater } = req.body;
 
         const db = admin.firestore();
 
@@ -12,6 +12,7 @@ exports.updateTaskProgress = functions.https.onRequest(async (req, res) => {
 
         await db.collection('task').doc(id).update({
             progress: progress,
+            updater: updater,
             updated_at: currentTimestamp
         });
 
