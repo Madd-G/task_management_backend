@@ -2,22 +2,22 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 
 exports.updateDeviceToken = functions.https.onRequest((req, res) => {
-    const { id, token } = req.body;
+    const { id, fcmToken } = req.body;
 
-    if (!id || !token) {
-        return res.status(400).json({ error: 'ID and token are required fields.' });
+    if (!id || !fcmToken) {
+        return res.status(400).json({ error: 'ID and fcmToken are required fields.' });
     }
 
-    // Update the token in the Firestore
+    // Update the fcmToken in the Firestore
     return admin.firestore().collection('users').doc(id).update({
-        token: token
+        fcmToken: fcmToken
     })
     .then(() => {
-        console.log('Token updated successfully');
-        return res.status(200).json({ message: 'Token updated successfully' });
+        console.log('fcmToken updated successfully');
+        return res.status(200).json({ message: 'fcmToken updated successfully' });
     })
     .catch((error) => {
-        console.error('Error updating token:', error);
-        return res.status(500).json({ error: 'Error updating token.' });
+        console.error('Error updating fcmToken:', error);
+        return res.status(500).json({ error: 'Error updating fcmToken.' });
     });
 });
