@@ -5,6 +5,7 @@ const { updateTaskPriority } = require('./updateTaskPriority')
 const { updateTaskProgress } = require('./updateTaskProgress')
 const { updateTaskStatus } = require('./updateTaskStatus')
 const { updateTaskIsRead } = require('./updateTaskIsRead')
+const { updateTaskIsNotificationSent } = require('./updateTaskIsNotificationSent')
 const { updateTaskDeadline } = require('./updateTaskDeadline')
 const { sendNotification } = require('./sendNotification')
 
@@ -16,6 +17,7 @@ module.exports = {
     updateTaskProgress,
     updateTaskStatus,
     updateTaskIsRead,
+    updateTaskIsNotificationSent,
     updateTaskDeadline,
     sendNotification,
 };

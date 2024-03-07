@@ -24,7 +24,7 @@ const hashPassword = async (password) => {
 app.post('/login', async (req, res) => {
     cors(req, res, async () => {
         try {
-            const { id, password } = req.body;
+            const { id, password, fcmToken } = req.body;
 
             // Retrieve user data from Firestore
             const userSnapshot = await db.collection('users').doc(id).get();
@@ -40,6 +40,7 @@ app.post('/login', async (req, res) => {
 
             // Combine token with userData
             userData.token = token;
+            userData.fcmToken = fcmToken;
 
             return res.status(200).json({ code: 1, userData });
         } catch (error) {

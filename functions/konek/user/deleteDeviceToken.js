@@ -9,7 +9,7 @@ exports.deleteDeviceToken = functions.https.onRequest((req, res) => {
         return res.status(400).json({ error: 'ID is a required field.' });
     }
 
-    // Hapus FCMToken dari dokumen pengguna di Firestore
+    // Delete FCMToken from user
     return admin.firestore().collection('users').doc(id).update({
         fcmToken: admin.firestore.FieldValue.delete()
     })
