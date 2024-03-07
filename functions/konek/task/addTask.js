@@ -2,7 +2,7 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 
 exports.addTask = functions.https.onRequest((req, res) => {
-    const { id, name, category, weight, start_date, end_date, status, assignee, target, description, progress, priority, image_url, is_notification_sent } = req.body;
+    const { id, name, category, weight, start_date, end_date, status, assignee, assignee_id, target, description, progress, priority, image_url, is_notification_sent } = req.body;
 
     // Get the Firestore instance
     const db = admin.firestore();
@@ -27,6 +27,7 @@ exports.addTask = functions.https.onRequest((req, res) => {
                     end_date: new Date(end_date._seconds * 1000 + end_date._nanoseconds / 1000000),
                     status: status,
                     assignee: assignee,
+                    assignee_id: assignee_id,
                     target: target,
                     progress: progress,
                     description: description,
@@ -35,8 +36,6 @@ exports.addTask = functions.https.onRequest((req, res) => {
                     updated_at: currentTimestamp,
                     image_url: image_url,
                     is_notification_sent: is_notification_sent,
-
-
                 })
                     .then(() => {
                         console.log("Task added with ID: ", id);
