@@ -77,7 +77,7 @@ const verifyToken = (req, res, next) => {
 app.post('/signUp', async (req, res) => {
     cors(req, res, async () => {
         try {
-            const { id, username, password,  email, role, createdAt, updatedAt, } = req.body;
+            const { id, username, password, email, role, createdAt, updatedAt, } = req.body;
 
             // Check if username already exists
             const userSnapshot = await db.collection('users').doc(id).get();
